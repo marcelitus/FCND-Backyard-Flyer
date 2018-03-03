@@ -48,7 +48,10 @@ class BackyardFlyer(Drone):
 
             # check if altitude is within 95% of target
             if altitude > 0.95 * self.target_position[2]:
-                self.landing_transition()
+                self.normalbox = self.calculate_box
+                self.waypoint_transition()
+
+            
 
 
     def velocity_callback(self):
@@ -82,7 +85,10 @@ class BackyardFlyer(Drone):
         
         1. Return waypoints to fly a box
         """
-        pass
+        print("Calculating flight path")
+        box_waypoints = [[15,0,3], [15,15,3][0,0,3]]
+        return box_waypoints
+
 
     def arming_transition(self):
         """TODO: Fill out this method
@@ -124,7 +130,11 @@ class BackyardFlyer(Drone):
         2. Transition to WAYPOINT state
         """
         print("waypoint transition")
-
+        self.next_position = self.normalbox.pop(0)
+        print("next waypoint", self.next_position)
+        self.cmd_position(self.next_position(0),self.next_position(1), self.next_position(2),0)
+        self.flight_phase = Phases.WAYPOINT
+        
     def landing_transition(self):
         """TODO: Fill out this method
         
